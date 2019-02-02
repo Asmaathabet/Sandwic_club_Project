@@ -20,6 +20,6 @@ Through this project, I will:
 
 ## What done to Complete the main Project?
 1- Download the [Sandwich Club app starter code.](https://github.com/udacity/sandwich-club-starter-code)
-2- Design the layout for the detail activity so the different elements
-3- display in a sensible way. Implement the JSON parsing in JsonUtils so it
-4- produces a Sandwich Object that can be used to populate the UI that you designed.
+<br>2- Design the layout for the detail activity so the different elements
+<br>3- display in a sensible way. Implement the JSON parsing in JsonUtils so it
+<br>4- produces a Sandwich Object that can be used to populate the UI that you designed.
