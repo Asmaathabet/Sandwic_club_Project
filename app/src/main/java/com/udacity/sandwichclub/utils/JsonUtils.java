@@ -9,12 +9,6 @@ import java.util.List;
 
 
 public class JsonUtils {
-    public static final String MAIN_NAME ="mainName";
-    public static final String ALSO_KNOWN_AS ="alsoKnownAs";
-    public static final String PLACE_OF_ORIGIN ="placeOfOrigin";
-    public static final String DESCRIPTION ="description";
-    public static final String IMAGE ="image";
-    public static final String INGREDIENTS ="ingredients";
 
 
     public static Sandwich parseSandwichJson(String json) {
@@ -24,46 +18,48 @@ public class JsonUtils {
 
             // For  Main Name Field (String)
             JSONObject sandwichObject = new JSONObject(json);
-            JSONObject mainName = sandwichObject.getJSONObject(MAIN_NAME);
-            if (mainName == null) {
-                return null;
-            }
-            sandwich.setMainName(mainName.optString(MAIN_NAME));
+            String MAIN_NAME = sandwichObject.getJSONObject("name").getString("mainName");
+            sandwich.setMainName(MAIN_NAME);
 
             // For  Also Known As Field (Array)
-            JSONArray AlsoKnownAs = mainName.optJSONArray(ALSO_KNOWN_AS);
+            JSONArray AlsoKnownAs = sandwichObject.getJSONObject("name").getJSONArray("alsoKnownAs");
             if (AlsoKnownAs == null) {
                 return null;
-            }
-            sandwich.setAlsoKnownAs(getStringsFromArrayJSON(AlsoKnownAs));
+            } else {
+                List<String> ArrayDetails = new ArrayList<>();
+                for (int i = 0; i < AlsoKnownAs.length(); i++) {
+                    ArrayDetails.add(String.valueOf(AlsoKnownAs.get(i)));
+                    sandwich.setAlsoKnownAs(ArrayDetails);
+                }
 
-            // For Place of Origin
-            JSONObject placeOfOrigin = sandwichObject.getJSONObject(PLACE_OF_ORIGIN);
-            if (placeOfOrigin == null) {
-                return null;
-            }
-            sandwich.setPlaceOfOrigin(placeOfOrigin.optString(PLACE_OF_ORIGIN));
+//            // For Place of Origin
+                String Place_of_Origin = sandwichObject.getString("placeOfOrigin");
+                sandwich.setPlaceOfOrigin(Place_of_Origin);
 
-            // For Description
-            JSONObject Description = sandwichObject.getJSONObject(DESCRIPTION);
-            if (Description == null) {
-                return null;
-            }
-            sandwich.setDescription(Description.optString(DESCRIPTION));
+//            // For Description
+                String Description = sandwichObject.getString("description");
+                sandwich.setDescription(Description);
 
-            //For Image
-            JSONObject Image = sandwichObject.getJSONObject(IMAGE);
-            if (Image == null) {
-                return null;
-            }
-            sandwich.setImage(Image.optString(IMAGE));
+              // For Image
+                String Image = sandwichObject.getString("image");
+                sandwich.setImage(Image);
 
-            //For Ingredients (Array)
-            JSONArray Ingredients = mainName.optJSONArray(INGREDIENTS);
-            if (Ingredients == null) {
-                return null;
+
+//            //For Ingredients (Array)
+                JSONArray Ingredients = sandwichObject.getJSONArray("ingredients");
+                if (Ingredients == null) {
+                    return null;
+                } else {
+                    List<String> IngredientsDetails = new ArrayList<>();
+                    for (int i = 0; i < Ingredients.length(); i++) {
+                        IngredientsDetails.add(String.valueOf(Ingredients.get(i)));
+                        sandwich.setIngredients(IngredientsDetails);
+                    }
+
+                }
+
             }
-            sandwich.setIngredients(getStringsFromArrayJSON(Ingredients));
+
 
 
 
@@ -71,28 +67,6 @@ public class JsonUtils {
             e.printStackTrace();
         }
 
-
         return sandwich;
-    }
-
-    private static List<String> getStringsFromArrayJSON(JSONArray ArrayFromJSON) {
-        List<String> ArrayDetails =new ArrayList<>();
-
-        if (ArrayFromJSON != null) {
-            for (int i = 0; i < ArrayFromJSON.length()-1 ; i++) {
-
-                String arrayString = null;
-                try {
-                    arrayString = ArrayFromJSON.getString(i);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                ArrayDetails.add(arrayString);
-
-            }
-
-        }
-
-        return ArrayDetails;
     }
 }

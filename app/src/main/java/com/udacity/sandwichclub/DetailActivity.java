@@ -17,21 +17,20 @@ import com.udacity.sandwichclub.utils.JsonUtils;
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
-    private static final int DEFAULT_POSITION = -1;
+    private static final int DEFAULT_POSITION =-1;
 
     TextView also_known_Detial;
     TextView origin_Detial;
     TextView ingredients_Detial;
     TextView description_Detial;
+    ImageView image_Detial;
 
-    Sandwich sandwich;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        RUNDetailsIntent();
         ImageView ingredientsIv = findViewById(R.id.image_iv);
 
         Intent intent = getIntent();
@@ -48,68 +47,56 @@ public class DetailActivity extends AppCompatActivity {
 
         String[] sandwiches = getResources().getStringArray(R.array.sandwich_details);
         String json = sandwiches[position];
-        Sandwich sandwich = JsonUtils.parseSandwichJson(json);
+         Sandwich sandwich = JsonUtils.parseSandwichJson(json);
         if (sandwich == null) {
             // Sandwich data unavailable
             closeOnError();
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
-                .into(ingredientsIv);
+                .into(image_Detial);
 
         setTitle(sandwich.getMainName());
     }
-    private void RUNDetailsIntent() {
-        also_known_Detial  = findViewById(R.id.also_known_tv);
-        origin_Detial      = findViewById(R.id.origin_tv);
-        ingredients_Detial = findViewById(R.id.ingredients_tv);
-        description_Detial = findViewById(R.id.description_tv);
 
-    }
+
 
     private void closeOnError() {
         finish();
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 
-    private void populateUI() {
+    private void populateUI(Sandwich sandwich) {
 
-        if (sandwich.getAlsoKnownAs().isEmpty() != true ){
+        also_known_Detial  = findViewById(R.id.also_known_tv);
+        origin_Detial      = findViewById(R.id.origin_tv);
+        ingredients_Detial = findViewById(R.id.ingredients_tv);
+        description_Detial = findViewById(R.id.description_tv);
+        image_Detial       = findViewById(R.id.image_iv);
 
-            also_known_Detial.setText(TextUtils.join("",sandwich.getAlsoKnownAs()));
-
-        }else {
-            also_known_Detial.setText("Null");
+        if (sandwich.getAlsoKnownAs()!=null){
+            also_known_Detial.setText(sandwich.getAlsoKnownAs().toString());
+        }
+        if (sandwich.getPlaceOfOrigin()!=null){
+            origin_Detial.setText(sandwich.getPlaceOfOrigin().toString());
+        }
+        if (sandwich.getIngredients()!=null){
+            ingredients_Detial.setText(sandwich.getIngredients().toString());
+        }
+         if (sandwich.getDescription()!=null){
+             description_Detial.setText(sandwich.getDescription().toString());
         }
 
-        if (sandwich.getPlaceOfOrigin().isEmpty()){
 
-            origin_Detial .setText("Null");
-        }else {
-
-            origin_Detial.setText(sandwich.getPlaceOfOrigin());
-
-        }
-
-
-        if ( sandwich.getIngredients().isEmpty() != true){
-            ingredients_Detial.setText(TextUtils.join("",sandwich.getIngredients()));
-
-        }else {
-            ingredients_Detial.setText("Null");
-        }
-
-        if (sandwich.getDescription().isEmpty() != true){
-
-            description_Detial.setText(sandwich.getDescription());
-        }else {
-            description_Detial.setText("Null");
-
-        }
 
     }
 }

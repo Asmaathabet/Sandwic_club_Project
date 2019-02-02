@@ -3,6 +3,7 @@ package com.udacity.sandwichclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -10,6 +11,7 @@ import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
 
+    String TAG = "test";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +33,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void launchDetailActivity(int position) {
+        Log.d(TAG, "launchDetailActivity: "+position);
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(DetailActivity.EXTRA_POSITION, position);
         startActivity(intent);
+
     }
 }
